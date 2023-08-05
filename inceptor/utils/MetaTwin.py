@@ -14,7 +14,9 @@ from win32_setctime import setctime
 
 class MetaTwin:
     def __init__(self):
-        self.path = str(Config().get_path("DIRECTORIES", f"libs").joinpath("ResourceHacker.exe"))
+        self.path = str(
+            Config().get_path("DIRECTORIES", "libs").joinpath("ResourceHacker.exe")
+        )
         self.debug = Config().get_boolean("DEBUG", "utilities")
         self.copy_from = None
         self.copy_to = None
@@ -31,9 +33,15 @@ class MetaTwin:
         self.copy_to = copy_to
 
         base_name = os.path.basename(tempfile.NamedTemporaryFile(prefix="resources").name)
-        log_file = Config().get_path("DIRECTORIES", f"writer").joinpath(f"{base_name}.log")
-        resource_file = Config().get_path("DIRECTORIES", f"writer").joinpath(f"{base_name}.res")
-        rc_file = Config().get_path("DIRECTORIES", f"writer").joinpath(f"{base_name}.rc")
+        log_file = (
+            Config().get_path("DIRECTORIES", "writer").joinpath(f"{base_name}.log")
+        )
+        resource_file = (
+            Config().get_path("DIRECTORIES", "writer").joinpath(f"{base_name}.res")
+        )
+        rc_file = (
+            Config().get_path("DIRECTORIES", "writer").joinpath(f"{base_name}.rc")
+        )
 
         if not os.path.isfile(copy_from):
             Console.auto_line(f"[-] MetaTwin: Source File {copy_from} not found")

@@ -31,11 +31,8 @@ class NopEncoder(Encoder):
     def decode(self, data):
         if isinstance(data, bytes):
             data = hexlify(data).decode()
-        decoded = ""
         tokens = [data[i:i + 2] for i in range(0, len(data), 2)]
-        for i in range(len(tokens)):
-            if i % 2 == 0:
-                decoded += tokens[i]
+        decoded = "".join(tokens[i] for i in range(len(tokens)) if i % 2 == 0)
         return unhexlify(decoded)
 
     def supported_languages(self):

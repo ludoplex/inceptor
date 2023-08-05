@@ -18,10 +18,7 @@ if __name__ == "__main__":
                         help='binary signature from disk')
     args = parser.parse_args()
 
-    certificate_file = None
-    if args.sigfile:
-        certificate_file = args.sigfile
-
+    certificate_file = args.sigfile if args.sigfile else None
     sig_thief = SigThief(action=args.action, certificate_file=certificate_file)
 
     if args.action == "save":

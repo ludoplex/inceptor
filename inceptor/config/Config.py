@@ -54,11 +54,7 @@ class Config(object):
         try:
             debug = int(self.get(section, key))
             return debug == 1
-        except KeyError:
-            return False
-        except ValueError:
-            return False
-        except TypeError:
+        except (KeyError, ValueError, TypeError):
             return False
         except Exception as e:
             raise e
@@ -66,24 +62,17 @@ class Config(object):
     def get_int(self, section, key):
         try:
             return int(self.get(section, key))
-        except KeyError:
-            return False
-        except ValueError:
-            return False
-        except TypeError:
+        except (KeyError, ValueError, TypeError):
             return False
         except Exception as e:
             raise e
 
     def get_path(self, section, key):
         try:
-            _path = Path(os.path.join(get_project_root(), self.get(section, key))).absolute()
-            return _path
-        except KeyError:
-            return None
-        except ValueError:
-            return None
-        except TypeError:
+            return Path(
+                os.path.join(get_project_root(), self.get(section, key))
+            ).absolute()
+        except (KeyError, ValueError, TypeError):
             return None
         except Exception as e:
             raise e
@@ -91,11 +80,7 @@ class Config(object):
     def get_list(self, section, key):
         try:
             return [x.strip().encode() for x in self.get(section, key).split(",")]
-        except KeyError:
-            return None
-        except ValueError:
-            return None
-        except TypeError:
+        except (KeyError, ValueError, TypeError):
             return None
         except Exception as e:
             raise e

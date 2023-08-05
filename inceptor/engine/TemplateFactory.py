@@ -66,8 +66,11 @@ class TemplateFactory:
         if not _filter:
             _filter = Filter()
         _filter.imode = "and"
-        if artifact_type in ["exe", "dll"] and not isDotNet(file) and (
-                isinstance(converter, Loader) or isinstance(converter, Pe2sh)):
+        if (
+            artifact_type in ["exe", "dll"]
+            and not isDotNet(file)
+            and (isinstance(converter, (Loader, Pe2sh)))
+        ):
             _filter.exclude.append("assembly_load")
             _filter.include.append("pe_load")
         elif artifact_type in ["exe", "dll"] and not isDotNet(file) and isinstance(converter, Donut):
@@ -86,7 +89,7 @@ class TemplateFactory:
 
         allfiles = [f for f in allfiles if _filter.match(f)]
 
-        if len(allfiles) == 0:
+        if not allfiles:
             Console.auto_line("[-] No template found with given criteria")
             sys.exit(1)
         elif len(allfiles) > 1:
@@ -102,8 +105,7 @@ class TemplateFactory:
                 f"{'process injection' if pinject else 'code execution'}"
             )
             sys.exit(1)
-        t = Template(path=path, language=language)
-        return t
+        return Template(path=path, language=language)
 
     @staticmethod
     def choose_template(templates: list):

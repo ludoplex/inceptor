@@ -28,9 +28,10 @@ class ImageFileMachine(Enum):
         machine = struct.unpack("<H", _bytes)[0]
         if machine == ImageFileMachine.IMAGE_FILE_MACHINE_I386.value:
             return Arch.x86
-        elif machine == ImageFileMachine.IMAGE_FILE_MACHINE_IA64.value:
-            return Arch.x64
-        elif machine == ImageFileMachine.IMAGE_FILE_MACHINE_AMD64.value:
+        elif machine in [
+            ImageFileMachine.IMAGE_FILE_MACHINE_IA64.value,
+            ImageFileMachine.IMAGE_FILE_MACHINE_AMD64.value,
+        ]:
             return Arch.x64
         else:
             _hex_value = hexlify(struct.pack('H', machine)).decode()
@@ -67,8 +68,13 @@ def py_bin2sh(filename):
     if not os.path.isfile(filename):
         raise FileNotFoundError("[-] Missing PyBin2Sh target file")
     content = hexlify(open(filename, "rb").read()).decode()
-    shellcode = "{" + ",".join([f"0x{content[i:i + 2]}" for i in range(0, len(content), 2)]) + "}"
-    return shellcode
+    return (
+        "{"
+        + ",".join(
+            [f"0x{content[i:i + 2]}" for i in range(0, len(content), 2)]
+        )
+        + "}"
+    )
 
 
 def sgn(shellcode, arch="x64"):
@@ -106,7 +112,7 @@ def isDotNet(filename):
     try:
         pe = PE(filename)
         clr_metadata = pe.OPTIONAL_HEADER.DATA_DIRECTORY[14]
-        return not (clr_metadata.VirtualAddress == 0 and clr_metadata.Size == 0)
+        return clr_metadata.VirtualAddress != 0 or clr_metadata.Size != 0
     except PEFormatError:
         return False
 
@@ -132,9 +138,7 @@ def choose(choices: list):
         try:
             choice = int(input("> "))
             return choices[choice]
-        except ValueError:
-            continue
-        except TypeError:
+        except (ValueError, TypeError):
             continue
 
 

@@ -47,7 +47,7 @@ class CscCompiler(Compiler):
         self.args["/platform"] = arch
 
     def set_libraries(self, libs: list):
-        if len(libs) > 0:
+        if libs:
             for lib in libs:
                 self.args[f'/res:"{lib}"'] = None
             self.args["/r"] = ",".join([f'"{lib}"' for lib in libs])

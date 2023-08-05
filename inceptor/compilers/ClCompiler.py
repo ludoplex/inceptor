@@ -18,7 +18,7 @@ class ClCompiler(Compiler):
     def format_libraries(self, libraries: list = None):
         if not libraries or not isinstance(libraries, list):
             libraries = []
-        libraries = libraries + self.std_library()
+        libraries += self.std_library()
         return " ".join([f'"{lib}"' for lib in libraries])
 
     def std_library(self):

@@ -33,10 +33,7 @@ class RleEncoder(Encoder):
 
     def decode(self, data):
         pairs = data.split(":")
-        decode = ""
-        for p in pairs:
-            decode += p[-1] * int(p[:-1])
-        return decode
+        return "".join(p[-1] * int(p[:-1]) for p in pairs)
 
     def supported_languages(self):
         return [Language.CSHARP]

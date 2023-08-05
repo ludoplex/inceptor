@@ -130,11 +130,7 @@ class AntiDebugModule(TemplateModule):
                 delete=False,
                 dir=str(Config().get_path("DIRECTORIES", "WRITER"))
             ).name
-        if language == Language.CSHARP:
-            nodebug_file += ".cs"
-        else:
-            nodebug_file += ".cpp"
-
+        nodebug_file += ".cs" if language == Language.CSHARP else ".cpp"
         template = kwargs["kwargs"]["template"]
         with open(nodebug_file, "w") as out:
             out.write(template.content)

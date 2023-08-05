@@ -121,7 +121,7 @@ class EncoderChain:
     @staticmethod
     def from_list(encoders: list = None):
         chain = EncoderChain()
-        if not encoders or len(encoders) == 0:
+        if not encoders:
             return chain
         for e in encoders:
             try:

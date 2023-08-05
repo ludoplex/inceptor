@@ -16,16 +16,26 @@ class DefineComponent(TemplateModuleComponent):
 
     @property
     def code(self):
-        if self.language == Language.CSHARP:
+        if (
+            self.language == Language.CSHARP
+            or self.language != Language.CPP
+            and self.language == Language.POWERSHELL
+        ):
             return f""
         elif self.language == Language.CPP:
-            if not self.__code.find("#define") > -1:
-                msg = self.prefix + "\n".join([f"#define {c.strip()}" for c in self.__code.split("\n") if len(c.strip()) > 0]) + self.suffix
-            else:
-                msg = f"{self.prefix}{self.__code}{self.suffix}"
-            return msg
-        elif self.language == Language.POWERSHELL:
-            return f""
+            return (
+                self.prefix
+                + "\n".join(
+                    [
+                        f"#define {c.strip()}"
+                        for c in self.__code.split("\n")
+                        if len(c.strip()) > 0
+                    ]
+                )
+                + self.suffix
+                if self.__code.find("#define") <= -1
+                else f"{self.prefix}{self.__code}{self.suffix}"
+            )
         else:
             return self.__code
 

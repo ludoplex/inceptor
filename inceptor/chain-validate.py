@@ -66,9 +66,7 @@ if __name__ == '__main__':
     languages = [Language.CPP, Language.CSHARP, Language.POWERSHELL]
 
     if args.lang:
-        languages = []
-        for lang in args.lang:
-            languages.append(Language.from_string(label=lang))
+        languages = [Language.from_string(label=lang) for lang in args.lang]
     outfiles = []
     for lang in languages:
         outfile = tempfile.NamedTemporaryFile(dir=Config().get_path("DIRECTORIES", "WRITER"), suffix=".bin",
@@ -112,7 +110,7 @@ if __name__ == '__main__':
             sys.exit(1)
 
         if len(writer.template.libraries) > 0 and lang == Language.CSHARP:
-            pack_exe(compiled_file, compiled_file + "2", writer.template.libraries)
+            pack_exe(compiled_file, f"{compiled_file}2", writer.template.libraries)
             if not os.path.isfile(compiled_file):
                 print("[-] Error generating encoder file")
                 sys.exit(1)

@@ -10,8 +10,7 @@ from config.Config import Config
 from pathlib import Path
 
 WIN_SDK = "https://developer.microsoft.com/it-it/windows/downloads/windows-10-sdk/"
-VS_BT = f"https://visualstudio.microsoft.com/downloads/?utm_medium=microsoft&utm_source=docs.microsoft.com" \
-        f"&utm_campaign=navigation+cta&utm_content=download+vs2019"
+VS_BT = 'https://visualstudio.microsoft.com/downloads/?utm_medium=microsoft&utm_source=docs.microsoft.com&utm_campaign=navigation+cta&utm_content=download+vs2019'
 NET_FW = "https://dotnet.microsoft.com/download/dotnet-framework"
 
 LLVM_LINK = "https://github.com/klezVirus/obfuscator/releases/download/v1.0.0/llvm-clang-v1.0.0.7z"
@@ -74,8 +73,8 @@ def detect_base_path():
         "C:\\Program Files\\Microsoft Visual Studio\\2022\\"
     ]
     available = [path for path in known_paths if os.path.isdir(path)]
-    print(f"[*] Identified multiple VS Installations")
-    print(f"[*] Choose the Visual Studio Version:")
+    print("[*] Identified multiple VS Installations")
+    print("[*] Choose the Visual Studio Version:")
     for n, ver in enumerate(available):
         print(f"  {n}: {ver}")
     choice = -1
@@ -160,59 +159,59 @@ def update_compilers(base_path, config: Config, commit=False):
 
     for path in Path(base_path).rglob('*.exe'):
         if path.name == "cl.exe" and path.parent.name == "x86" and path.parent.parent.name == "Hostx86":
-            c.set("COMPILERS", f"CLx86_COMPILER", str(path))
+            c.set("COMPILERS", "CLx86_COMPILER", str(path))
             print(f"  [+] Located CL.EXE (32-bit) at {path}")
             found[0] = True
             versions["CLx86_COMPILER"].append(str(path))
         elif path.name == "cl.exe" and path.parent.name == "x64" and path.parent.parent.name == "Hostx64":
-            c.set("COMPILERS", f"CLx64_COMPILER", str(path))
+            c.set("COMPILERS", "CLx64_COMPILER", str(path))
             print(f"  [+] Located CL.EXE (64-bit) at {path}")
             found[1] = True
             versions["CLx64_COMPILER"].append(str(path))
         elif path.name == "clang-cl.exe" and path.parent.name == "bin" and path.parent.parent.name == "x64":
-            c.set("COMPILERS", f"CLANGx64_COMPILER", str(path))
+            c.set("COMPILERS", "CLANGx64_COMPILER", str(path))
             print(f"  [+] Located CLANG.EXE (64-bit) at {path}")
             found[2] = True
             versions["CLANGx64_COMPILER"].append(str(path))
         elif path.name == "clang-cl.exe" and path.parent.name == "bin" and path.parent.parent.name == "Llvm":
-            c.set("COMPILERS", f"CLANGx86_COMPILER", str(path))
+            c.set("COMPILERS", "CLANGx86_COMPILER", str(path))
             print(f"  [+] Located CLANG.EXE (32-bit) at {path}")
             found[3] = True
             versions["CLANGx86_COMPILER"].append(str(path))
         elif path.name == "ml.exe" and path.parent.name == "x86" and path.parent.parent.name == "Hostx86":
-            c.set("COMPILERS", f"MASMx86_COMPILER", str(path))
+            c.set("COMPILERS", "MASMx86_COMPILER", str(path))
             print(f"  [+] Located ML.EXE (32-bit) at {path}")
             found[4] = True
             versions["MASMx86_COMPILER"].append(str(path))
         elif path.name == "ml64.exe" and path.parent.name == "x64" and path.parent.parent.name == "Hostx64":
-            c.set("COMPILERS", f"MASMx64_COMPILER", str(path))
+            c.set("COMPILERS", "MASMx64_COMPILER", str(path))
             print(f"  [+] Located ML64.EXE (64-bit) at {path}")
             found[5] = True
             versions["MASMx64_COMPILER"].append(str(path))
         elif path.name.lower() == "msbuild.exe" and path.parent.name.lower() == "amd64" and path.parent.parent.name.lower() == "bin":
-            c.set("COMPILERS", f"MSBUILDx64_COMPILER", str(path))
+            c.set("COMPILERS", "MSBUILDx64_COMPILER", str(path))
             print(f"  [+] Located MSBUILD.EXE (64-bit) at {path}")
             found[6] = True
             versions["MSBUILDx86_COMPILER"].append(str(path))
         elif path.name.lower() == "msbuild.exe" and path.parent.name.lower() == "bin":
-            c.set("COMPILERS", f"MSBUILDx86_COMPILER", str(path))
+            c.set("COMPILERS", "MSBUILDx86_COMPILER", str(path))
             print(f"  [+] Located MSBUILD.EXE (32-bit) at {path}")
             found[7] = True
             versions["MSBUILDx64_COMPILER"].append(str(path))
         elif path.name == "lib.exe" and path.parent.name == "x86" and path.parent.parent.name == "Hostx86":
-            c.set("COMPILERS", f"LIBx86_COMPILER", str(path))
+            c.set("COMPILERS", "LIBx86_COMPILER", str(path))
             print(f"  [+] Located LIB.EXE (32-bit) at {path}")
             found[8] = True
             versions["LIBx86_COMPILER"].append(str(path))
         elif path.name == "lib.exe" and path.parent.name == "x64" and path.parent.parent.name == "Hostx64":
-            c.set("COMPILERS", f"LIBx64_COMPILER", str(path))
+            c.set("COMPILERS", "LIBx64_COMPILER", str(path))
             print(f"  [+] Located LIB.EXE (64-bit) at {path}")
             found[9] = True
             versions["LIBx64_COMPILER"].append(str(path))
 
     for path in Path(base_path).rglob('*.bat'):
         if path.name == "vcvarsall.bat":
-            c.set("COMPILERS", f"VCVARSALL", str(path))
+            c.set("COMPILERS", "VCVARSALL", str(path))
             print(f"  [+] Located VCVARSALL utility at {path}")
             found[10] = True
             versions["VCVARSALL"].append(str(path))
@@ -221,7 +220,7 @@ def update_compilers(base_path, config: Config, commit=False):
     c.save_config()
 
     try:
-        if not (found[2] or found[3]) and any(found):
+        if not found[2] and not found[3] and any(found):
             print("[-] Windows Clang compiler not installed. Opening Microsoft Download site...")
             time.sleep(2)
             os.startfile(VS_BT)
@@ -315,26 +314,25 @@ def update_signers():
 
 
 def update_section(config: Config, section: str, versions: dict):
-    if any([True for v in versions.values() if len(v) > 0]):
-        for k, v in versions.items():
-            if len(v) == 0:
+    if not any(True for v in versions.values() if len(v) > 0):
+        return
+    for k, v in versions.items():
+        if len(v) == 0:
+            continue
+        if len(v) == 1:
+            print(f"[+] Setting {section}.{k} to {v[0]}")
+            config.set(section, k, v[0])
+            continue
+        print(f"[*] Choose a version for {k}:")
+        for n, ver in enumerate(v):
+            print(f"  {n}: {ver}")
+        choice = -1
+        while not (0 <= choice < len(v)):
+            try:
+                choice = int(input("> "))
+                config.set(section, k, v[choice])
+            except (ValueError, TypeError):
                 continue
-            if len(v) == 1:
-                print(f"[+] Setting {section}.{k} to {v[0]}")
-                config.set(section, k, v[0])
-                continue
-            print(f"[*] Choose a version for {k}:")
-            for n, ver in enumerate(v):
-                print(f"  {n}: {ver}")
-            choice = -1
-            while not (0 <= choice < len(v)):
-                try:
-                    choice = int(input("> "))
-                    config.set(section, k, v[choice])
-                except ValueError:
-                    continue
-                except TypeError:
-                    continue
 
 
 def update_dumper(base_path):
@@ -347,11 +345,11 @@ def update_dumper(base_path):
         "dumpbin_x64": []
     }
     for path in Path(base_path).rglob('dumpbin.exe'):
-        if path.parent.name == "x86" and path.parent.name == "x86" and path.parent.parent.name == "Hostx86":
+        if path.parent.name == "x86" and path.parent.parent.name == "Hostx86":
             print(f"  [+] Located dumpbin x86 utility at {path}")
             found[0] = True
             versions["dumpbin_x86"].append(str(path))
-        elif path.parent.name == "x64" and path.parent.name == "x64" and path.parent.parent.name == "Hostx64":
+        elif path.parent.name == "x64" and path.parent.parent.name == "Hostx64":
             print(f"  [+] Located dumpbin x64 utility at {path}")
             found[1] = True
             versions["dumpbin_x64"].append(str(path))

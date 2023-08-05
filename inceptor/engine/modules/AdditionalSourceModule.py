@@ -5,8 +5,7 @@ from enums.Architectures import Arch
 
 class AdditionalSourceModule(TemplateModule):
     def generate(self, **kwargs):
-        content = kwargs["kwargs"]["content"]
-        if content:
+        if content := kwargs["kwargs"]["content"]:
             with open(self.path, "w") as source:
                 source.write(content)
 

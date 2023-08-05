@@ -24,8 +24,14 @@ class AesEncryptor(Encoder):
         super().__init__()
         self.decoder_in = [bytes]
         self.decoder_out = [bytes]
-        self.key = ''.join(secrets.choice(".+-,:;_%=()" + string.ascii_letters + string.digits) for _ in range(36)).encode()
-        self.salt = ''.join(secrets.choice(".+-,:;_%=()" + string.ascii_letters + string.digits) for _ in range(18)).encode()
+        self.key = ''.join(
+            secrets.choice(f".+-,:;_%=(){string.ascii_letters}{string.digits}")
+            for _ in range(36)
+        ).encode()
+        self.salt = ''.join(
+            secrets.choice(f".+-,:;_%=(){string.ascii_letters}{string.digits}")
+            for _ in range(18)
+        ).encode()
         self.derived_key = PBKDF2(self.key.decode(), self.salt, 32, 1000)
         self.iv = PBKDF2(self.key.decode(), self.salt, 48, 1000)[32:]
 
@@ -43,8 +49,7 @@ class AesEncryptor(Encoder):
         if not isinstance(data, bytes):
             data = data.encode()
         cipher = AES.new(self.derived_key, AES.MODE_CBC, self.iv)
-        encrypted = cipher.encrypt(pad(data, AES.block_size))
-        return encrypted
+        return cipher.encrypt(pad(data, AES.block_size))
 
     def decode(self, data):
         cipher = AES.new(self.derived_key, AES.MODE_CBC, self.iv)

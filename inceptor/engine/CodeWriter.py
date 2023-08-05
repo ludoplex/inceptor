@@ -169,7 +169,7 @@ class CodeWriter:
         try:
             content = self.template.generate(shellcode=shellcode)
         except Exception as e:
-            print(f"[-] Exception in write_source while decoding template")
+            print("[-] Exception in write_source while decoding template")
             print(f"[-] Exception: {e}")
             # traceback.print_exc()
             sys.exit(1)

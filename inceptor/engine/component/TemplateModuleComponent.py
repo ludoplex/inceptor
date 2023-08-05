@@ -11,10 +11,7 @@ class TemplateModuleComponent(ABC):
 
     @property
     def code(self):
-        if not self.trail:
-            return self.__code
-        else:
-            return f"{self.__code};\n{self.placeholder}"
+        return self.__code if not self.trail else f"{self.__code};\n{self.placeholder}"
 
     def as_function_call(self, content, language=None):
         pass

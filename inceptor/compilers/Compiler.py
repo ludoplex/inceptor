@@ -51,9 +51,12 @@ class Compiler(ABC):
             else:
                 file_arg += f" \"{file}\""
         try:
-            args = ""
-            for k in self.args.keys():
-                args += f" {k}{self.sep}{self.args[k]}" if self.args[k] is not None else f" {k}"
+            args = "".join(
+                f" {k}{self.sep}{self.args[k]}"
+                if self.args[k] is not None
+                else f" {k}"
+                for k in self.args.keys()
+            )
             cmd = f"\"{self.path}\" {args} {file_arg}"
             if self.aargs:
                 cmd = f"{cmd} {self.aargs}"
@@ -80,9 +83,6 @@ class Compiler(ABC):
             obfuscator_class_string = f"compilers.{name.capitalize()}Compiler.{name.capitalize()}Compiler"
             # print(obfuscator_class_string)
             obfuscator_class = locate(obfuscator_class_string)
-            # print(obfuscator_class)
-            obfuscator_instance = obfuscator_class(args=args, aargs=aargs, arch=arch)
-            return obfuscator_instance
+            return obfuscator_class(args=args, aargs=aargs, arch=arch)
         except:
             traceback.print_exc()
-            pass

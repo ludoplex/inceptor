@@ -42,8 +42,9 @@ class FindProcessModule(TemplateModule):
 
         if language == Language.CSHARP:
             components = [
-                UsingComponent(code=f"System.Diagnostics", language=language),
-                CodeComponent(code=fr"""
+                UsingComponent(code="System.Diagnostics", language=language),
+                CodeComponent(
+                    code=fr"""
                     public static class {classname}
                     {{
                         public static int {function}(string processName) {{
@@ -55,8 +56,11 @@ class FindProcessModule(TemplateModule):
                             return pid;
                         }}
                     }}
-                """),
-                FindProcessComponent(code=f'pid = {classname}.{function}("{process}");')
+                """
+                ),
+                FindProcessComponent(
+                    code=f'pid = {classname}.{function}("{process}");'
+                ),
             ]
         elif language == Language.CPP:
             components = [

@@ -59,10 +59,7 @@ class NativeArtifactGenerator(Generator):
 
         # DLL Wrap generates a Write-Execute DLL
         self.dll_wrap = dll
-        # DLL will generate a DLL instead of an exe (I might get rid of this distinction as it generates a bit of mess)
-        self.dll = False
-        if self.outfile.endswith("dll"):
-            self.dll = True
+        self.dll = bool(self.outfile.endswith("dll"))
         # LI Encoding
         self.sgn = sgn
         # Code Signing
@@ -122,8 +119,7 @@ class NativeArtifactGenerator(Generator):
                                          arch=arch)
             self.exe_writer.load_chain(chain=self.chain)
 
-        # DLL Writer
-        elif self.dll:
+        else:
             _dll_filter = Filter(include=["dll"])
 
             self.dll_writer = CodeWriter(

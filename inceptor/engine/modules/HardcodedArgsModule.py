@@ -30,10 +30,8 @@ class StaticArgsModule(TemplateModule):
         if args is None:
             args = []
         libraries = None
-        components = []
-        for index, arg in enumerate(args, start=1):
-            components.append(HardcodedArgComponent(
-                index=index,
-                code=arg
-                ))
+        components = [
+            HardcodedArgComponent(index=index, code=arg)
+            for index, arg in enumerate(args, start=1)
+        ]
         super().__init__(name="HardcodedArgs", libraries=libraries, components=components, arch=arch)
