@@ -16,10 +16,7 @@ class AsStrongAsFuck(Obfuscator):
         if "filename" not in kwargs['kwargs'].keys():
             raise MissingArgumentException("A file to obfuscate is required")
 
-        if dinvoke:
-            self.args["-o"] = "25789"
-        else:
-            self.args["-o"] = "235789"
+        self.args["-o"] = "25789" if dinvoke else "235789"
         self.args["-f"] = f"\"{kwargs['kwargs']['filename']}\""
 
         if not os.path.isfile(self.path):
@@ -31,9 +28,12 @@ class AsStrongAsFuck(Obfuscator):
     def obfuscate(self):
         out_filename = None
         try:
-            args = ""
-            for k in self.args.keys():
-                args += f" {k}{self.sep}{self.args[k]}" if self.args[k] is not None else f" {k}"
+            args = "".join(
+                f" {k}{self.sep}{self.args[k]}"
+                if self.args[k] is not None
+                else f" {k}"
+                for k in self.args.keys()
+            )
             cmd = f"\"{self.path}\" {args}"
             if self.debug:
                 print(cmd)

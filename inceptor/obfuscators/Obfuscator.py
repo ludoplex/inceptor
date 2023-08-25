@@ -31,19 +31,14 @@ class Obfuscator(ABC):
 
     @staticmethod
     def from_name(name: str, language: Language, **kwargs):
-        clazz = "dotnet"
-        if language == language.POWERSHELL:
-            clazz = "powershell"
+        clazz = "powershell" if language == language.POWERSHELL else "dotnet"
         try:
             obfuscator_class_string = f"obfuscators.{clazz}.{name}.{name}"
             # print(obfuscator_class_string)
             obfuscator_class = locate(obfuscator_class_string)
-            # print(obfuscator_class)
-            obfuscator_instance = obfuscator_class(kwargs=kwargs['kwargs'])
-            return obfuscator_instance
+            return obfuscator_class(kwargs=kwargs['kwargs'])
         except:
             traceback.print_exc()
-            pass
 
     @abstractmethod
     def obfuscate(self):
@@ -82,7 +77,9 @@ class Obfuscator(ABC):
         return Obfuscator.from_name(name=str(obfuscators[choice]), language=language, kwargs=kwargs)
 
     def normalise_args(self):
-        args = ""
-        for k in self.args.keys():
-            args += f" {k}{self.sep}{self.args[k]}" if self.args[k] is not None else f" {k}"
-        return args
+        return "".join(
+            f" {k}{self.sep}{self.args[k]}"
+            if self.args[k] is not None
+            else f" {k}"
+            for k in self.args.keys()
+        )

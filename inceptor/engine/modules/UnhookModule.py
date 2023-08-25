@@ -23,10 +23,11 @@ class UnhookModule(TemplateModule):
         language = kwargs["kwargs"]["language"]
         arch = kwargs["kwargs"]["arch"]
 
-        if language == Language.CPP:
-            components = [
-                UsingComponent("<psapi.h>", language=language),
-                CodeComponent(r"""
+        if language != Language.CPP:
+            raise ModuleNotCompatibleException()
+        components = [
+            UsingComponent("<psapi.h>", language=language),
+            CodeComponent(r"""
                     int UnhookNtdll()
                     {
                         // https://www.ired.team/offensive-security/defense-evasion/how-to-unhook-a-dll-using-c++
@@ -73,9 +74,7 @@ class UnhookModule(TemplateModule):
                         return 0;
                     }
                 """),
-                UnhookComponent("UnhookNtdll();"),
-            ]
-            libraries = ["dbghelp.lib"]
-        else:
-            raise ModuleNotCompatibleException()
+            UnhookComponent("UnhookNtdll();"),
+        ]
+        libraries = ["dbghelp.lib"]
         super().__init__(name="Unhook", libraries=libraries, components=components, arch=arch)

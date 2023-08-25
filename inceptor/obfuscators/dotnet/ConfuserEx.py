@@ -13,8 +13,12 @@ class ConfuserEx(Obfuscator):
     def __init__(self, **kwargs):
         super().__init__(sep=" ", path=None, args={})
         self.config = Config()
-        self.path = os.path.join(get_project_root(), self.config.get("OBFUSCATORS", "dotnet"), self.name,
-                                 f"Confuser.CLI.exe")
+        self.path = os.path.join(
+            get_project_root(),
+            self.config.get("OBFUSCATORS", "dotnet"),
+            self.name,
+            "Confuser.CLI.exe",
+        )
 
         if "filename" not in kwargs['kwargs'].keys():
             raise MissingArgumentException("A file to obfuscate is required")

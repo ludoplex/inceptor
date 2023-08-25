@@ -32,7 +32,7 @@ class SigThief:
                 suffix=".cer",
                 delete=True
             ).name
-        elif certificate_file and action == "add":
+        elif action == "add":
             self.certificate = open(self.certificate_file, "rb").read()
         self.target_info = {}
 
@@ -142,7 +142,7 @@ class SigThief:
             self.target_info['CertLOC'] = struct.unpack("<I", binary.read(4))[0]
             self.target_info['CertSize'] = struct.unpack("<I", binary.read(4))[0]
         if self.debug:
-            Console.auto_line(f"[+] Information successfully recovered")
+            Console.auto_line("[+] Information successfully recovered")
 
     def copy_cert(self, signee):
         self.__gather_file_info_win(signee)

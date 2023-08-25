@@ -94,7 +94,7 @@ class PowerShellArtifactGenerator(Generator):
         Console.auto_line(f"[*] Phase 3: Generating wrapper using {self.writer.template.template_name}")
         self.writer.write_source(shellcode=shellcode)
         if self.obfuscate:
-            Console.auto_line(f"[*] Phase 4: Obfuscating PowerShell Wrapper")
+            Console.auto_line("[*] Phase 4: Obfuscating PowerShell Wrapper")
             self.obfuscate_wrapper()
 
         if os.path.isfile(self.writer.outfile):

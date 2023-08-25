@@ -177,7 +177,7 @@ class Koppeling:
         cloned_bytes = cloned_pe.write()
         open(destination, 'wb').write(cloned_bytes)
         if self.debug:
-            Console.auto_line('[+] Done: {}'.format(destination))
+            Console.auto_line(f'[+] Done: {destination}')
 
 
 def main(arguments):
@@ -197,7 +197,7 @@ def main(arguments):
         args.path = args.reference
 
     if not args.out:
-        args.out = args.target + '.clone.dll'
+        args.out = f'{args.target}.clone.dll'
 
     koppeling.clone_exports(args.reference, args.target, args.path, args.section_name)
 

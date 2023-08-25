@@ -21,7 +21,7 @@ class SysWhispers(object):
     def generate(self, function_names: list = (), basename: str = 'syscalls'):
         if not function_names:
             function_names = list(self.prototypes.keys())
-        elif any([f not in self.prototypes.keys() for f in function_names]):
+        elif any(f not in self.prototypes.keys() for f in function_names):
             raise ValueError('Prototypes are not available for one or more of the requested functions.')
 
         # Write C file.
@@ -112,9 +112,8 @@ class SysWhispers(object):
         if function_name not in self.prototypes:
             raise ValueError('Invalid function name provided.')
 
-        num_params = len(self.prototypes[function_name]['params'])
         signature = f'EXTERN_C NTSTATUS {function_name}('
-        if num_params:
+        if num_params := len(self.prototypes[function_name]['params']):
             for i in range(num_params):
                 param = self.prototypes[function_name]['params'][i]
                 signature += '\n\t'

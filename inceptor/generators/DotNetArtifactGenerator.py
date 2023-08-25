@@ -77,13 +77,15 @@ class DotNetArtifactGenerator(Generator):
         filename = os.path.basename(filename)
         self.working_directory = working_directory = Config().get_path("DIRECTORIES", "WRITER")
 
-        self.dll = True if ext == ".dll" else False
+        self.dll = ext == ".dll"
 
         self.outfiles = {
-            "temp": os.path.join(working_directory, filename + "-temp" + ext),
-            "packed": os.path.join(working_directory, filename + "-packed" + ext),
-            "obfuscated": os.path.join(working_directory, filename + "-obfuscated" + ext),
-            "signed": os.path.join(working_directory, filename + "-signed" + ext),
+            "temp": os.path.join(working_directory, f"{filename}-temp{ext}"),
+            "packed": os.path.join(working_directory, f"{filename}-packed{ext}"),
+            "obfuscated": os.path.join(
+                working_directory, f"{filename}-obfuscated{ext}"
+            ),
+            "signed": os.path.join(working_directory, f"{filename}-signed{ext}"),
             "final": outfile,
         }
         _filter = Filter(exclude=["dll"]) if not self.dll else Filter(include=["dll"])
@@ -171,8 +173,7 @@ class DotNetArtifactGenerator(Generator):
 
     def obfuscate_exe(self):
         obfuscator = Obfuscator.choose_obfuscator(language=Language.CSHARP, filename=self.outfiles['temp'])
-        new_file = obfuscator.obfuscate()
-        if new_file:
+        if new_file := obfuscator.obfuscate():
             shutil.move(new_file, self.outfiles['temp'])
 
     def finalise_exe(self):

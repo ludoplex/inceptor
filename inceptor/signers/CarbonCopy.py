@@ -46,9 +46,9 @@ class CarbonCopy(Signer):
             self.certificate_directory.mkdir(exist_ok=True)
 
             # Creating Fake Certificate
-            CNCRT = self.certificate_directory / (self.host + ".crt")
-            CNKEY = self.certificate_directory / (self.host + ".key")
-            PFXFILE = self.certificate_directory / (self.host + ".pfx")
+            CNCRT = self.certificate_directory / f"{self.host}.crt"
+            CNKEY = self.certificate_directory / f"{self.host}.key"
+            PFXFILE = self.certificate_directory / f"{self.host}.pfx"
 
             # Creating Keygen
             k = crypto.PKey()
@@ -113,15 +113,6 @@ class CarbonCopy(Signer):
                     "/fd", "SHA256",
                     f"\"{signed}\""
                 )
-                cmd = " ".join(args)
-                try:
-                    output = subprocess.check_output(cmd, shell=True)
-                    if output.decode().find("Number of errors: 0") > -1:
-                        return True
-                    else:
-                        return False
-                except:
-                    pass
             else:
                 if self.verbose:
                     print("[+] Platform is Linux OS...")
@@ -132,17 +123,12 @@ class CarbonCopy(Signer):
 
                 if self.verbose:
                     print("[+] ", end='', flush=True)
-                cmd = " ".join(args)
-                try:
-                    output = subprocess.check_output(cmd, shell=True)
-                    # Need to modify this
-                    if output.decode().find("Number of errors: 0") > -1:
-                        return True
-                    else:
-                        return False
-                except:
-                    pass
-
+            cmd = " ".join(args)
+            try:
+                output = subprocess.check_output(cmd, shell=True)
+                return output.decode().find("Number of errors: 0") > -1
+            except:
+                pass
         except Exception as ex:
             traceback.print_exc()
             print(f"[X] Something Went Wrong!\n[X] Exception: {ex}")

@@ -53,7 +53,7 @@ class Template:
             print(f"[-] Exception: {e}")
             return
         if raw_template.find(self.shellcode_placeholder) < 0:
-            raise TemplateException(f"[-] Error: Template missing SHELLCODE placeholder!")
+            raise TemplateException("[-] Error: Template missing SHELLCODE placeholder!")
         self.identify_imports(raw_template)
         self.template = base64.b64encode(raw_template.encode())
 
@@ -70,8 +70,9 @@ class Template:
         self.libraries = []
         self.components = []
         for module in self.modules:
-            if not isinstance(module, EncoderModule) or (
-                    isinstance(module, EncoderModule) and module.name not in self.defined
+            if (
+                not isinstance(module, EncoderModule)
+                or module.name not in self.defined
             ):
                 self.libraries += module.libraries
                 self.components += module.components
@@ -79,11 +80,11 @@ class Template:
         self.libraries = list(set(self.libraries))
 
     def collect_sources(self):
-        sources = []
-        for module in self.modules:
-            if isinstance(module, AssemblyInfoModule) or isinstance(module, AdditionalSourceModule):
-                sources.append(module.path)
-        return sources
+        return [
+            module.path
+            for module in self.modules
+            if isinstance(module, (AssemblyInfoModule, AdditionalSourceModule))
+        ]
 
     def add_module(self, module):
         self.modules.append(module)
@@ -127,11 +128,8 @@ class Template:
                 return f"\"{shellcode}\""
 
     def clean(self, template):
-        new_content = []
         regex = re.compile(r"^\s*//.*$")
-        for line in template.split("\n"):
-            if not regex.search(line):
-                new_content.append(line)
+        new_content = [line for line in template.split("\n") if not regex.search(line)]
         return "\n".join(new_content)
 
     def generate(self, shellcode=None):
@@ -142,10 +140,15 @@ class Template:
                 if c.code.strip() in self.imports:
                     continue
             c.placeholder_style(language=self.language)
-            raw_template = raw_template.replace(c.placeholder, c.code + f"\n{c.placeholder}")
+            raw_template = raw_template.replace(
+                c.placeholder, f"{c.code}\n{c.placeholder}"
+            )
         if shellcode:
             raw_template = raw_template.replace(self.shellcode_placeholder, self.craft(shellcode))
-            raw_template = raw_template.replace(self.call_placeholder, self.call_decode + f"\n{self.call_placeholder}")
+            raw_template = raw_template.replace(
+                self.call_placeholder,
+                f"{self.call_decode}\n{self.call_placeholder}",
+            )
         raw_template = self.clean(raw_template)
         return raw_template
 

@@ -27,7 +27,6 @@ class Encoder(ABC):
         self.decoder_in = None
         self.decoder_out = None
         self.order = order
-        pass
 
     def set_order(self, order):
         self.order = order

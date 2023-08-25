@@ -21,8 +21,7 @@ class ZlibEncoder(Encoder):
     def encode(self, data):
         if isinstance(data, str):
             data = bytes(data, 'utf-8')
-        compressed = codecs.encode(data, 'zlib')
-        return compressed
+        return codecs.encode(data, 'zlib')
 
     def decode(self, data):
         return data.decode('zlib')

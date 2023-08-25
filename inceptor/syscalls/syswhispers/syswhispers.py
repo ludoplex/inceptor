@@ -147,18 +147,25 @@ class SysWhispers(object):
             print(f'\t{basename}.h')
 
     def get_version_compatibility(self, versions: list) -> dict:
-        version_compatibility = {}
-        for version in versions:
-            version_compatibility[version] = list(filter(lambda f: version in self.syscall_numbers[f],
-                                                         [f for f in self.syscall_numbers]))
-        return version_compatibility
+        return {
+            version: list(
+                filter(
+                    lambda f: version in self.syscall_numbers[f],
+                    list(self.syscall_numbers),
+                )
+            )
+            for version in versions
+        }
 
     def get_function_compatibility(self, function_names: list) -> dict:
-        function_compatibility = {}
-        for function_name in function_names:
-            function_compatibility[function_name] = [v for v in self.syscall_numbers[function_name].keys()
-                                                     if v in self.version_syscall_map(function_name).keys()]
-        return function_compatibility
+        return {
+            function_name: [
+                v
+                for v in self.syscall_numbers[function_name].keys()
+                if v in self.version_syscall_map(function_name).keys()
+            ]
+            for function_name in function_names
+        }
 
     def _get_typedefs(self, function_names: list) -> list:
         def _names_to_ids(names: list) -> list:
@@ -206,9 +213,8 @@ class SysWhispers(object):
         if function_name not in self.prototypes:
             return ""
 
-        num_params = len(self.prototypes[function_name]['params'])
         signature = f'EXTERN_C NTSTATUS {function_name}('
-        if num_params:
+        if num_params := len(self.prototypes[function_name]['params']):
             for i in range(num_params):
                 param = self.prototypes[function_name]['params'][i]
                 signature += '\n\t'

@@ -88,12 +88,11 @@ class TemplateModule:
         except ModuleNotCompatibleException:
             raise ModuleNotCompatibleException()
         except TypeError as e:
-            if str(e).find("unexpected keyword argument 'kwargs'") > -1:
+            if "unexpected keyword argument 'kwargs'" in str(e):
                 raise ModuleNotLoadableException()
-            elif str(e).find("'NoneType' object is not callable") > -1:
+            elif "'NoneType' object is not callable" in str(e):
                 raise ModuleNotFoundException()
             else:
                 traceback.print_exc()
         except Exception as e:
             traceback.print_exc()
-            pass

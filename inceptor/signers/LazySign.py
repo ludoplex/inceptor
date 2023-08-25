@@ -113,11 +113,11 @@ class LazySign(Signer):
 
         exit = False
         if self.verbose:
-            Console.auto_line(f"[*] Generating self-signed certificate")
+            Console.auto_line("[*] Generating self-signed certificate")
         self.make_cert(pvk_file=pvk_file, cer_file=cer_file)
 
         if self.verbose:
-            Console.auto_line(f"[*] Exporting certificate in PFX format")
+            Console.auto_line("[*] Exporting certificate in PFX format")
         self.export_pfx(pfx_file=pfx_file, pvk_file=pvk_file, cer_file=cer_file)
 
         for step in steps:

@@ -17,7 +17,7 @@ class Generator(ABC):
         self.file = file
         self.clone = None
         if not os.path.isfile(file):
-            print(f"[-] Error reading input file")
+            print("[-] Error reading input file")
             sys.exit(1)
 
         self.chain = chain
@@ -29,10 +29,7 @@ class Generator(ABC):
         pass
 
     def sign(self, signee, signed, domain=None, offline=False, clone=None):
-        if not domain:
-            host = Config().get("SIGNING", "domain")
-        else:
-            host = domain
+        host = Config().get("SIGNING", "domain") if not domain else domain
         if offline and clone:
             shutil.copy(signee, signed)
             signer_class = Signer.from_name("SigThief")

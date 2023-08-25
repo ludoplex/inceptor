@@ -35,9 +35,12 @@ class LoGIC_NET(Obfuscator):
 
     def obfuscate(self):
         try:
-            args = ""
-            for k in self.args.keys():
-                args += f" {k}{self.sep}{self.args[k]}" if self.args[k] is not None else f" {k}"
+            args = "".join(
+                f" {k}{self.sep}{self.args[k]}"
+                if self.args[k] is not None
+                else f" {k}"
+                for k in self.args.keys()
+            )
             cmd = f"\"{self.path}\" {args}"
             if self.debug:
                 print(cmd)

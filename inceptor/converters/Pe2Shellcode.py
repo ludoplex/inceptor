@@ -36,7 +36,9 @@ class Pe2sh(Transformer):
             output = e.output
             Console.fail_line(output.decode())
         if re.search(rb"\[WARNING\]", output):
-            Console.warn_line("  " + re.search(rb"\[WARNING\].*", output)[0].decode().strip())
+            Console.warn_line(
+                f'  {re.search(b"\[WARNING\].*", output)[0].decode().strip()}'
+            )
             Console.warn_line(f"  [WARNING] {target.split(chr(92))[-1]} may not work in .NET")
         if not re.search(rb"\[\+\]\sSaved\sas\:", output):
             raise ConversionError(f"Failed to convert {target}")

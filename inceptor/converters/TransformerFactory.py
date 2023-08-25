@@ -15,10 +15,7 @@ class TransformerFactory:
         filename, ext = os.path.splitext(file)
         allowed_list = []
         if ext == ".exe":
-            if isDotNet(file):
-                allowed_list = [Loader, Donut]
-            else:
-                allowed_list = [Loader, Pe2sh, Donut]
+            allowed_list = [Loader, Donut] if isDotNet(file) else [Loader, Pe2sh, Donut]
         elif ext == ".dll":
             allowed_list = [sRDI]
         if ext == ".raw":
@@ -29,10 +26,7 @@ class TransformerFactory:
     def from_file(file) -> Transformer:
         filename, ext = os.path.splitext(file)
         if ext == ".exe":
-            if isDotNet(file):
-                return Donut()
-            else:
-                return Pe2sh()
+            return Donut() if isDotNet(file) else Pe2sh()
         elif ext == ".dll":
             return sRDI()
         if ext == ".raw":

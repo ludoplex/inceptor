@@ -32,8 +32,6 @@ class Signer(ABC):
     def from_name(name: str):
         try:
             signer_class_string = f"signers.{name}.{name}"
-            signer_class = locate(signer_class_string)
-            return signer_class
+            return locate(signer_class_string)
         except:
             traceback.print_exc()
-            pass

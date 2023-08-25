@@ -17,7 +17,10 @@ class XorEncoder(Encoder):
         super().__init__()
         self.decoder_in = [bytes]
         self.decoder_out = [bytes]
-        self.key = ''.join(secrets.choice(".+-,:;_%=()" + string.ascii_letters + string.digits) for _ in range(12)).encode()
+        self.key = ''.join(
+            secrets.choice(f".+-,:;_%=(){string.ascii_letters}{string.digits}")
+            for _ in range(12)
+        ).encode()
 
     def slow_encode(self, data):
         encoded = b""

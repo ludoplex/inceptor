@@ -83,7 +83,7 @@ class Console:
             Console.debug(what=what)
         elif what.find("[-]") > -1:
             Console.fail(what=what)
-        elif what == "Success" or what == "Done":
+        elif what in ["Success", "Done"]:
             Console.success(what=what)
         elif what == "Fail":
             Console.fail(what=what)
@@ -104,7 +104,7 @@ class Console:
             Console.debug_line(what=what)
         elif what.find("[-]") > -1:
             Console.fail_line(what=what)
-        elif what == "Success" or what == "Done":
+        elif what in ["Success", "Done"]:
             Console.write_line(what=what, color=Fore.LIGHTWHITE_EX)
         elif what == "Fail":
             Console.fail_line(what=what)
